@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -34,6 +35,15 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+
+Route::get('/reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotpassword']);
+
+
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetpassword']);
 
 // protected Routes 
 // Route::middleware('auth:sanctum')->get('/students', [StudentController::class, 'index']);
@@ -74,6 +84,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     })->name('verification.verify');
 
     Route::post('/email/verification-notification',[EmailVerificationController::class, 'resendverification']);
+
+   
+
 
  
 // Route::post('/email/verification-notification', function (Request $request) {
